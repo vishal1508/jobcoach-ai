@@ -13,8 +13,6 @@ import markdownify
 import httpx
 import readabilipy
 
-from openai import OpenAI
-
 # --- Load environment variables ---
 load_dotenv()
 
