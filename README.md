@@ -1,185 +1,176 @@
-MCP Starter for Puch AI
-This is a starter template for creating your own Model Context Protocol (MCP) server that works with Puch AI. It comes with ready-to-use tools for job searching, image processing, and interview coaching.
 
-What is MCP?
-MCP (Model Context Protocol) allows AI assistants like Puch to connect to external tools and data sources safely. Think of it like giving your AI extra superpowers without compromising security.
+# MCP Starter for Puch AI
 
-What's Included in This Starter?
-🎯 Job Finder Tool
-Analyze job descriptions - Paste any job description and get smart insights
+This is a starter template for building your own Model Context Protocol (MCP) server to extend Puch AI with custom tools. It includes ready-made tools for job searching, image processing, and interview coaching powered by OpenAI.
 
-Fetch job postings from URLs - Give a job posting link and get the full details
+---
 
-Search for jobs - Use natural language to find relevant job opportunities
+## What is MCP?
 
-🖼️ Image Processing Tool
-Convert images to black & white - Upload any image and get a monochrome version
+MCP (Model Context Protocol) is a secure way for AI assistants like Puch AI to connect with external tools and APIs, enabling extended capabilities while maintaining security and control.
 
-🧑‍💼 Interview Coach Tool
-Analyze your resume, job description, and interview answers
+---
 
-Get AI-powered feedback on how to improve your resume and interview performance
+## Included Tools
 
-Receive detailed suggestions and tips tailored to your job application
+### 🎯 Job Finder
+- Analyze job descriptions
+- Extract job posting details from URLs
+- Search for relevant jobs using natural language
 
-🔐 Built-in Authentication
-Bearer token authentication (required by Puch AI)
+### 🖼️ Image Processing
+- Convert uploaded images to black & white
 
-Validation tool that returns your phone number
+### 🧑‍💼 Interview Coach (New!)
+- Analyze your resume, job description, and interview answers
+- Receive AI-powered feedback on improving your resume and interview responses
+- Get tailored tips to boost your interview performance
 
-Quick Setup Guide
-Step 1: Install Dependencies
-Make sure you have Python 3.11 or higher installed. Then:
+---
 
-bash
-Copy
-Edit
-# Create virtual environment
-uv venv
+## Getting Started
 
-# Install all required packages
-uv sync
+### Prerequisites
 
-# Activate the environment
-source .venv/bin/activate
-Step 2: Set Up Environment Variables
-Create a .env file in the project root:
+- Python 3.11 or newer
+- An OpenAI API key (for the interview coach tool)
 
-bash
-Copy
-Edit
-# Copy the example file
-cp .env.example .env
-Then edit .env and add your details:
+### Setup
 
-env
-Copy
-Edit
-AUTH_TOKEN=your_secret_token_here
-MY_NUMBER=919876543210
-OPENAI_API_KEY=your_openai_api_key_here
-Important Notes:
+1. **Clone the repository and create a virtual environment**
 
-AUTH_TOKEN: This is your secret token for authentication. Keep it safe!
+   ```bash
+   git clone <repo-url>
+   cd mcp-starter
+   uv venv
+   uv sync
+   source .venv/bin/activate
+   ```
 
-MY_NUMBER: Your WhatsApp number in format {country_code}{number} (e.g., 919876543210 for +91-9876543210)
+2. **Configure environment variables**
 
-OPENAI_API_KEY: Your OpenAI API key for using the interview coach tool
+   Copy `.env.example` to `.env` and update:
 
-Step 3: Run the Server
-bash
-Copy
-Edit
-cd mcp-bearer-token
-python mcp_starter.py
-You'll see: 🚀 Starting MCP server on http://0.0.0.0:8086
+   ```env
+   AUTH_TOKEN=your_secret_auth_token
+   MY_NUMBER=919876543210
+   OPENAI_API_KEY=your_openai_api_key_here
+   ```
 
-Step 4: Make It Public (Required by Puch)
-Since Puch needs to access your server over HTTPS, you need to expose your local server:
+   - `AUTH_TOKEN`: Secret token for API authentication
+   - `MY_NUMBER`: Your WhatsApp number in international format (e.g., `919876543210`)
+   - `OPENAI_API_KEY`: OpenAI key for the interview coach tool
 
-Option A: Using ngrok (Recommended)
-Install ngrok:
-Download from https://ngrok.com/download
+3. **Run the server**
 
-Get your authtoken:
+   ```bash
+   python mcp_starter.py
+   ```
 
-Go to https://dashboard.ngrok.com/get-started/your-authtoken
+   Server will start on `http://0.0.0.0:8086`
 
-Copy your authtoken
+---
 
-Run: ngrok config add-authtoken YOUR_AUTHTOKEN
+## Exposing Your Server Publicly
 
-Start the tunnel:
+Puch AI requires an HTTPS accessible endpoint.
 
-bash
-Copy
-Edit
-ngrok http 8086
-Option B: Deploy to Cloud
-You can also deploy this to services like:
+### Option 1: Using ngrok (Recommended)
 
-Railway
+- Download and install ngrok: https://ngrok.com/download
+- Authenticate ngrok:
 
-Render
+  ```bash
+  ngrok config add-authtoken YOUR_NGROK_AUTHTOKEN
+  ```
 
-Heroku
+- Start ngrok tunnel:
 
-DigitalOcean App Platform
+  ```bash
+  ngrok http 8086
+  ```
 
-How to Connect with Puch AI
-Open Puch AI in your browser
+- Use the displayed HTTPS URL to connect with Puch AI.
 
-Start a new conversation
+### Option 2: Deploy to Cloud
 
-Use the connect command:
+Deploy on platforms like Railway, Render, Heroku, or DigitalOcean.
 
-arduino
-Copy
-Edit
-/mcp connect https://your-domain.ngrok.app/mcp your_secret_token_here
-Debug Mode
-To get more detailed error messages:
+---
 
-pgsql
-Copy
-Edit
-/mcp diagnostics-level debug
-Custom Tools in This Starter
-Interview Coach Tool
-This tool uses OpenAI to analyze your resume, job description, and interview answers and then provide feedback.
+## Connecting with Puch AI
 
-Inputs
-resume_text: Your full resume as text
+1. Open a conversation with Puch AI: [https://wa.me/+919998881729](https://wa.me/+919998881729)
+2. Use the connect command:
 
-job_description: The job description text you are applying for
+   ```
+   /mcp connect https://your-ngrok-or-cloud-url/mcp your_secret_auth_token
+   ```
 
-interview_answer: Your answer to an interview question
+3. For verbose diagnostics:
 
-Output
-Suggestions to improve your resume to better match the job
+   ```
+   /mcp diagnostics-level debug
+   ```
 
-Feedback on your interview answer
+---
 
-Tips to improve your interview performance
+## Interview Coach Tool Details
 
-Example Usage
-python
-Copy
-Edit
+This tool uses OpenAI's GPT-4o-mini model to analyze your resume, job description, and interview answer, then provides personalized feedback and improvement suggestions.
+
+### Inputs
+
+| Parameter         | Description                       |
+|-------------------|---------------------------------|
+| `resume_text`     | Your resume as plain text        |
+| `job_description` | Job description you’re applying for |
+| `interview_answer`| Your answer to an interview question |
+
+### Output
+
+- Resume improvement suggestions tailored to the job
+- Constructive feedback on your interview answer
+- Practical interview performance tips
+
+### Example Usage
+
+```python
 response = interview_coach(
-    resume_text="Experienced Java developer with 5 years of backend development...",
-    job_description="We are looking for a full-stack Java developer with React experience...",
-    interview_answer="My biggest strength is my ability to learn quickly and solve complex problems..."
+    resume_text="Experienced Java developer with 5 years...",
+    job_description="Looking for a full-stack developer proficient in Java and React...",
+    interview_answer="My greatest strength is problem-solving and teamwork..."
 )
 print(response.text)
-How to Add Your Own Tools
-Create a new tool function:
+```
 
-python
-Copy
-Edit
-@mcp.tool(description="Your tool description")
+---
+
+## Adding Your Own Tools
+
+Add new tools by defining async functions decorated with `@mcp.tool`:
+
+```python
+@mcp.tool(description="Your tool description here")
 async def your_tool_name(
-    parameter: Annotated[str, Field(description="Parameter description")]
+    param: Annotated[str, Field(description="Describe parameter")]
 ) -> str:
-    # Your tool logic here
-    return "Tool result"
-Add required imports if needed.
+    # Your implementation here
+    return "Result"
+```
 
-📚 Additional Documentation Resources
-Official Puch AI MCP Documentation: https://puch.ai/mcp
+---
 
-Core MCP protocol and commands
+## Resources and Help
 
-JSON-RPC 2.0 Specification: https://www.jsonrpc.org/specification
+- **Official MCP Documentation:** https://puch.ai/mcp  
+- **JSON-RPC 2.0 Spec:** https://www.jsonrpc.org/specification
+- **Puch AI Discord:** https://discord.gg/VMCnMvYx
+- **Contact Puch AI:** +91 99988 81729 (WhatsApp)
 
-Getting Help
-Join Puch AI Discord: https://discord.gg/VMCnMvYx
+---
 
-Check Puch AI MCP docs: https://puch.ai/mcp
+**Happy coding! 🚀**  
+Use hashtag `#BuildWithPuch` when sharing your MCP projects.
 
-Puch WhatsApp Number: +91 99988 81729
-
-Happy coding! 🚀
-
-Use the hashtag #BuildWithPuch in your posts about your MCP!
+---
