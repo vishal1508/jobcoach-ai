@@ -128,6 +128,26 @@ mcp = FastMCP(
 async def validate() -> str:
     return MY_NUMBER
 
+@mcp.tool(description="Simple daily wellness chatbot tool")
+async def wellness_chatbot(
+    user_message: Annotated[str, Field(description="User's message to the wellness chatbot")]
+) -> TextContent:
+    msg_lower = user_message.lower()
+
+    if any(word in msg_lower for word in ["stress", "anxious", "worried", "tired"]):
+        reply = (
+            "I'm sorry to hear you're feeling this way. "
+            "Try taking a few deep breaths or a short walk to clear your mind."
+        )
+    elif any(word in msg_lower for word in ["happy", "good", "great", "awesome"]):
+        reply = "That's wonderful to hear! Keep embracing these positive vibes! 😊"
+    elif "exercise" in msg_lower:
+        reply = "Exercise is a great way to boost mood! Have you done your workout today?"
+    else:
+        reply = "Thanks for sharing! Remember, taking small steps daily helps build good habits."
+
+    return TextContent(type="text", text=reply)
+
 # --- Tool: job_finder (now smart!) ---
 JobFinderDescription = RichToolDescription(
     description="Smart job tool: analyze descriptions, fetch URLs, or search jobs based on free text.",
