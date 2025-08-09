@@ -13,7 +13,7 @@ import markdownify
 import httpx
 import readabilipy
 
-import openai
+from openai import OpenAI
 
 # --- Load environment variables ---
 load_dotenv()
@@ -171,47 +171,6 @@ async def job_finder(
         )
 
     raise McpError(ErrorData(code=INVALID_PARAMS, message="Please provide either a job description, a job URL, or a search query in user_goal."))
-
-
-
-
-openai.api_key = os.getenv("OPENAI_API_KEY")
-
-INTERVIEW_COACH_DESCRIPTION = RichToolDescription(
-    description="Interview coach: analyze resume, job description, and user's interview answer and provide feedback.",
-    use_when="Use this tool to help users improve their resume and interview skills.",
-    side_effects="Returns detailed AI-powered feedback and suggestions."
-)
-
-@mcp.tool(description=INTERVIEW_COACH_DESCRIPTION.model_dump_json())
-async def interview_coach(
-    resume_text: Annotated[str, Field(description="User's resume text")],
-    job_description: Annotated[str, Field(description="Job description text")],
-    interview_answer: Annotated[str, Field(description="User's answer to interview question")],
-) -> TextContent:
-    prompt = (
-        f"Act as an expert interview coach.\n\n"
-        f"Resume:\n{resume_text}\n\n"
-        f"Job Description:\n{job_description}\n\n"
-        f"Interview Answer:\n{interview_answer}\n\n"
-        "Provide:\n"
-        "- Suggestions to improve the resume to better match the job.\n"
-        "- Feedback on the interview answer.\n"
-        "- Tips to improve interview performance."
-    )
-
-    try:
-        response = openai.ChatCompletion.create(
-            model="gpt-4o-mini",
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.7,
-            max_tokens=500,
-        )
-        result = response.choices[0].message.content.strip()
-        return TextContent(type="text", text=result)
-    except Exception as e:
-        raise McpError(ErrorData(code=INTERNAL_ERROR, message=str(e)))
-
 
 # Image inputs and sending images
 
